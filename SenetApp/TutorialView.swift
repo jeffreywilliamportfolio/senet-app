@@ -117,6 +117,9 @@ struct TutorialBoardCard: View {
                 selectedPieceID: board.selectedPieceID,
                 legalDestinations: board.legalDestinations,
                 movablePieceIDs: [],
+                captureFlashSquare: nil,
+                waterSweepToken: nil,
+                isWaterSweepActive: false,
                 humanColor: humanColor,
                 computerColor: computerColor,
                 onSquareTap: { _ in }
