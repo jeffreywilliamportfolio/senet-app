@@ -37,7 +37,8 @@ fragment float4 boardFragment(VertexOut in [[stage_in]],
                               texture2d<float> inkTex [[texture(1)]],
                               texture2d<float> vignetteTex [[texture(2)]],
                               texture2d<float> dustTex [[texture(3)]]) {
-    constexpr sampler samp(address::repeat, filter::linear);
+    constexpr sampler sampRepeat(address::repeat, filter::linear);
+    constexpr sampler sampClamp(address::clamp_to_edge, filter::linear);
     float2 uv = in.uv;
     float2 grid = uv * u.boardSize;
     float2 cell = floor(grid);
@@ -55,8 +56,8 @@ fragment float4 boardFragment(VertexOut in [[stage_in]],
         index = 20 + col;
     }
 
-    float3 base = boardTex.sample(samp, uv).rgb;
-    float dust = dustTex.sample(samp, uv * 2.0 + u.time * 0.01).r;
+    float3 base = boardTex.sample(sampClamp, uv).rgb;
+    float dust = dustTex.sample(sampRepeat, uv * 2.0 + u.time * 0.01).r;
     base = mix(base, base + (dust - 0.5) * 0.04, 0.35);
 
     float2 distToEdge = min(cellFrac, 1.0 - cellFrac);
@@ -64,7 +65,7 @@ fragment float4 boardFragment(VertexOut in [[stage_in]],
     float line = step(distToEdge.x, lineWidth) + step(distToEdge.y, lineWidth);
     line = clamp(line, 0.0, 1.0);
 
-    float ink = inkTex.sample(samp, uv * 6.0).r;
+    float ink = inkTex.sample(sampRepeat, uv * 6.0).r;
     float3 gridColor = float3(0.28, 0.24, 0.2) * mix(0.8, 1.1, ink);
     float3 color = mix(base, gridColor, line * 0.75);
 
@@ -77,7 +78,7 @@ fragment float4 boardFragment(VertexOut in [[stage_in]],
         color = mix(color, float3(0.85, 0.62, 0.25), 0.35);
     }
 
-    float vignette = vignetteTex.sample(samp, uv).r;
+    float vignette = vignetteTex.sample(sampClamp, uv).r;
     color *= mix(1.0, vignette, 0.9);
 
     return float4(color, 1.0);

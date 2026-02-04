@@ -76,6 +76,16 @@ final class GameViewModel: ObservableObject {
         Set(legalMoves.map { $0.to })
     }
 
+    var visibleLegalDestinations: Set<Int> {
+        guard let selectedPieceID else { return legalDestinations }
+        let filtered = legalMoves.filter { $0.pieceID == selectedPieceID }.map { $0.to }
+        return Set(filtered)
+    }
+
+    var movablePieceIDs: Set<PieceID> {
+        Set(legalMoves.map { $0.pieceID })
+    }
+
     func startGame() {
         state = SenetRules.newGame()
         currentThrow = nil
@@ -340,7 +350,8 @@ struct GameView: View {
                     BoardView(
                         state: viewModel.state,
                         selectedPieceID: viewModel.selectedPieceID,
-                        legalDestinations: viewModel.legalDestinations,
+                        legalDestinations: viewModel.visibleLegalDestinations,
+                        movablePieceIDs: viewModel.movablePieceIDs,
                         humanColor: viewModel.humanColor,
                         computerColor: viewModel.computerColor,
                         onSquareTap: viewModel.handleTap
@@ -358,7 +369,8 @@ struct GameView: View {
                     BoardView(
                         state: viewModel.state,
                         selectedPieceID: viewModel.selectedPieceID,
-                        legalDestinations: viewModel.legalDestinations,
+                        legalDestinations: viewModel.visibleLegalDestinations,
+                        movablePieceIDs: viewModel.movablePieceIDs,
                         humanColor: viewModel.humanColor,
                         computerColor: viewModel.computerColor,
                         onSquareTap: viewModel.handleTap
@@ -509,6 +521,7 @@ struct BoardView: View {
     let state: GameState
     let selectedPieceID: PieceID?
     let legalDestinations: Set<Int>
+    let movablePieceIDs: Set<PieceID>
     let humanColor: Color
     let computerColor: Color
     let onSquareTap: (Int) -> Void
@@ -537,6 +550,7 @@ struct BoardView: View {
                         piece: pieceAt(square: square),
                         isSelected: isSelected(square: square),
                         isLegalDestination: legalDestinations.contains(square),
+                        isMovable: isMovable(square: square),
                         humanColor: humanColor,
                         computerColor: computerColor
                     )
@@ -568,6 +582,11 @@ struct BoardView: View {
         guard let selectedPieceID else { return false }
         return state.pieces.first(where: { $0.id == selectedPieceID })?.position == square
     }
+
+    private func isMovable(square: Int) -> Bool {
+        guard let piece = pieceAt(square: square) else { return false }
+        return movablePieceIDs.contains(piece.id)
+    }
 }
 
 struct SquareView: View {
@@ -575,12 +594,19 @@ struct SquareView: View {
     let piece: PieceState?
     let isSelected: Bool
     let isLegalDestination: Bool
+    let isMovable: Bool
     let humanColor: Color
     let computerColor: Color
 
     var body: some View {
         ZStack {
             Color.clear
+
+            if isMovable && !isSelected {
+                Circle()
+                    .strokeBorder(SenetTheme.mutedInk.opacity(0.45), lineWidth: 2)
+                    .padding(10)
+            }
 
             if isSelected {
                 Image("selection-ring")

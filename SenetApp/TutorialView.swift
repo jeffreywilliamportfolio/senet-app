@@ -116,6 +116,7 @@ struct TutorialBoardCard: View {
                 state: board.state,
                 selectedPieceID: board.selectedPieceID,
                 legalDestinations: board.legalDestinations,
+                movablePieceIDs: [],
                 humanColor: humanColor,
                 computerColor: computerColor,
                 onSquareTap: { _ in }
