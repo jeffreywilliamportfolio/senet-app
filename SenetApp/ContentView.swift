@@ -252,10 +252,13 @@ final class GameViewModel: ObservableObject {
     }
 
     private func triggerWaterSweep() {
-        waterSweepToken = UUID()
+        let token = UUID()
+        waterSweepToken = token
         isWaterSweepActive = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { [weak self] in
-            self?.isWaterSweepActive = false
+            guard let self, self.waterSweepToken == token else { return }
+            self.isWaterSweepActive = false
+            self.waterSweepToken = nil
         }
     }
 
