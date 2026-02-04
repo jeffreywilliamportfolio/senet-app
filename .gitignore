@@ -1,0 +1,22 @@
+# Python virtualenvs
+venv/
+.venv/
+env/
+envs/
+
+# Environment files
+.env/
+.env.*
+
+# Caches
+__pycache__/
+*.pyc
+.cache/
+cache/
+
+# Temporary files
+tmp/
+
+# Xcode user data
+*.xcuserstate
+xcuserdata/

@@ -21,6 +21,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     }
 }
 
+@MainActor
 final class OrientationLock {
     static let shared = OrientationLock()
     var mask: UIInterfaceOrientationMask = .portrait

@@ -9,7 +9,7 @@ struct RootView: View {
             .onAppear {
                 applyOrientation(for: viewModel.stage)
             }
-            .onChange(of: viewModel.stage) { newStage in
+            .onChange(of: viewModel.stage) { _, newStage in
                 applyOrientation(for: newStage)
             }
     }
@@ -27,6 +27,5 @@ struct RootView: View {
               let window = windowScene.windows.first,
               let root = window.rootViewController else { return }
         root.setNeedsUpdateOfSupportedInterfaceOrientations()
-        UIViewController.attemptRotationToDeviceOrientation()
     }
 }
