@@ -1,0 +1,4 @@
+module SenetRules {
+header "SenetRules-Swift.h"
+export *
+}

@@ -1,0 +1,40 @@
+Perfect. I’ll give you asset specs aligned to your exact plan: mechanics-first, SwiftUI now, Metal-ready later. I’ll keep this concrete and boring-on-purpose so it’s actually usable.
+
+Board surface texture
+Generate at 2048×2048 or 4096×4096. PNG or lossless WebP. Must be perfectly tileable in both directions. This asset is used immediately in SwiftUI as a background fill and later sampled in Metal as the base parchment material. Never bake grid lines, borders, or symbols into it.
+
+Grid line / ink texture
+Generate at 512×512 or 1024×1024. Transparent background PNG. Tileable horizontally and vertically. In SwiftUI, you may use it sparingly for line strokes or overlays; in Metal, it becomes a sampled texture multiplied into procedural grid math to avoid flat digital lines.
+
+Chevron border strip
+Generate as a long horizontal strip, roughly 2048×256. PNG. Must tile cleanly left-to-right. In SwiftUI, you can stretch or tile it around the board using simple geometry; later, in Metal, you can sample it for border regions only. Avoid perspective or lighting—this stays graphic.
+
+Corner ornament
+Generate square, 256×256 or 512×512. Transparent PNG or PDF if vector-like. Used as four repeated corner stamps in SwiftUI. Later, in Metal, this can either remain a SwiftUI overlay or be sampled into the shader for corner-only composition.
+
+Special-square glyphs (five icons)
+Generate each icon separately at 256×256 or 512×512. Transparent background, monochrome (black). These should also work as PDFs if your generator supports vector-style output. In mechanics-only mode, they can be hidden or lightly indicated; later they drop cleanly into SwiftUI overlays or Metal stamping without rework.
+
+Player tokens (two  sets)
+Generate at 512×512. Transparent PNG. Top-down or consistent slight angle. These are used immediately in SwiftUI with scale and shadow effects. They should not include baked-in lighting that conflicts with future Metal board lighting—keep shading subtle and neutral.
+
+Selection ring / highlight
+Generate at 256×256 or 512×512. Transparent PNG. This is used immediately in SwiftUI to indicate selection and legal focus. Later, this asset may be retired or reduced once Metal-based glow replaces it, so don’t overdesign it.
+
+Legal-move marker
+Generate at 128×128 or 256×256. Transparent PNG. Used immediately in SwiftUI to mark legal destinations. Keep it visually quiet; this is functional UI, not decoration. In a Metal future, this can be replaced entirely by shader-based square highlighting.
+
+Capture / swap flash
+Generate at 512×512. Transparent PNG. This is a transient overlay asset used only during swap animations. SwiftUI can animate opacity and scale now; later, this effect may migrate to Metal or be removed entirely, so treat it as optional polish.
+
+Water penalty sweep overlay
+Generate at 2048×512 or 2048×1024. Transparent PNG. Designed to slide across the board horizontally or vertically. In SwiftUI, this is a simple animated overlay; in Metal, it becomes unnecessary because the effect is better expressed procedurally.
+
+Subtle vignette
+Generate at 2048×2048. Transparent PNG. Used as a static overlay above the board to add depth. In Metal, this should be replaced by a shader-based vignette, so keep it extremely subtle and neutral.
+
+Ambient dust overlay
+Generate at 2048×2048. Transparent PNG. Very low contrast. This is optional even now; if you use it, it should be barely perceptible. In a Metal future, this becomes a noise texture sampled directly in the fragment shader.
+
+File organization recommendation
+Put all assets under a single logical group such as Assets/CoreBoard in your project. Do not encode mythology or meaning in filenames. Name assets by function, not symbolism. This keeps your mechanics build clean and prevents rework later.

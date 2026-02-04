@@ -1,0 +1,29 @@
+{
+  "" : {
+    "diagnostics" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/.xcodeDerivedData/Build/Intermediates.noindex/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/SenetRules-primary.dia",
+    "emit-module-dependencies" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/.xcodeDerivedData/Build/Intermediates.noindex/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/SenetRules-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/.xcodeDerivedData/Build/Intermediates.noindex/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/SenetRules-primary-emit-module.dia",
+    "pch" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/.xcodeDerivedData/Build/Intermediates.noindex/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/SenetRules-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/.xcodeDerivedData/Build/Intermediates.noindex/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/SenetRules-primary.swiftdeps"
+  },
+  "/Volumes/ExternalSSD/Projects/senet-0.0.1/SenetRules/Sources/SenetRules/Rules.swift" : {
+    "const-values" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/.xcodeDerivedData/Build/Intermediates.noindex/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/Rules.swiftconstvalues",
+    "dependencies" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/.xcodeDerivedData/Build/Intermediates.noindex/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/Rules.d",
+    "diagnostics" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/.xcodeDerivedData/Build/Intermediates.noindex/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/Rules.dia",
+    "index-unit-output-path" : "/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/Rules.o",
+    "llvm-bc" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/.xcodeDerivedData/Build/Intermediates.noindex/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/Rules.bc",
+    "object" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/.xcodeDerivedData/Build/Intermediates.noindex/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/Rules.o",
+    "swift-dependencies" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/.xcodeDerivedData/Build/Intermediates.noindex/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/Rules.swiftdeps",
+    "swiftmodule" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/.xcodeDerivedData/Build/Intermediates.noindex/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/Rules~partial.swiftmodule"
+  },
+  "/Volumes/ExternalSSD/Projects/senet-0.0.1/SenetRules/Sources/SenetRules/Types.swift" : {
+    "const-values" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/.xcodeDerivedData/Build/Intermediates.noindex/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/Types.swiftconstvalues",
+    "dependencies" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/.xcodeDerivedData/Build/Intermediates.noindex/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/Types.d",
+    "diagnostics" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/.xcodeDerivedData/Build/Intermediates.noindex/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/Types.dia",
+    "index-unit-output-path" : "/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/Types.o",
+    "llvm-bc" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/.xcodeDerivedData/Build/Intermediates.noindex/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/Types.bc",
+    "object" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/.xcodeDerivedData/Build/Intermediates.noindex/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/Types.o",
+    "swift-dependencies" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/.xcodeDerivedData/Build/Intermediates.noindex/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/Types.swiftdeps",
+    "swiftmodule" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/.xcodeDerivedData/Build/Intermediates.noindex/SenetRules.build/Debug-iphoneos/SenetRules.build/Objects-normal/arm64/Types~partial.swiftmodule"
+  }
+}
