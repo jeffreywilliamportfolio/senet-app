@@ -17,6 +17,9 @@ cache/
 # Temporary files
 tmp/
 
+# Generated outputs
+output/
+
 # Xcode user data
 *.xcuserstate
 xcuserdata/

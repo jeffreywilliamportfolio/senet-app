@@ -1,0 +1,13 @@
+{
+  "images": [
+    {
+      "filename": "legal_move_marker.png",
+      "idiom": "universal",
+      "scale": "1x"
+    }
+  ],
+  "info": {
+    "author": "xcode",
+    "version": 1
+  }
+}
