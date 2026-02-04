@@ -583,29 +583,25 @@ struct SquareView: View {
             Color.clear
 
             if isSelected {
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .stroke(SenetTheme.accentBorder, lineWidth: 3)
-                    .padding(4)
+                Image("selection-ring")
+                    .resizable()
+                    .scaledToFit()
+                    .padding(6)
+            }
+
+            if isLegalDestination {
+                Image("legal-move-marker")
+                    .resizable()
+                    .scaledToFit()
+                    .padding(12)
             }
 
             if let piece {
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [
-                                piece.owner == .human ? humanColor.opacity(0.95) : computerColor.opacity(0.95),
-                                piece.owner == .human ? humanColor.opacity(0.55) : computerColor.opacity(0.55)
-                            ],
-                            center: .topLeading,
-                            startRadius: 2,
-                            endRadius: 28
-                        )
-                    )
-                    .overlay(
-                        Circle().stroke(Color.black.opacity(0.2), lineWidth: 1)
-                    )
-                    .shadow(color: Color.black.opacity(0.2), radius: 6, x: 0, y: 3)
+                Image(piece.owner == .human ? "player-token-a" : "player-token-b")
+                    .resizable()
+                    .scaledToFit()
                     .padding(6)
+                    .shadow(color: Color.black.opacity(0.2), radius: 6, x: 0, y: 3)
             }
 
             Text("\(square)")

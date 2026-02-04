@@ -32,7 +32,12 @@ float hash21(float2 p) {
 
 fragment float4 boardFragment(VertexOut in [[stage_in]],
                               constant BoardUniforms &u [[buffer(0)]],
-                              constant float *legalMask [[buffer(1)]]) {
+                              constant float *legalMask [[buffer(1)]],
+                              texture2d<float> boardTex [[texture(0)]],
+                              texture2d<float> inkTex [[texture(1)]],
+                              texture2d<float> vignetteTex [[texture(2)]],
+                              texture2d<float> dustTex [[texture(3)]]) {
+    constexpr sampler samp(address::repeat, filter::linear);
     float2 uv = in.uv;
     float2 grid = uv * u.boardSize;
     float2 cell = floor(grid);
@@ -50,16 +55,18 @@ fragment float4 boardFragment(VertexOut in [[stage_in]],
         index = 20 + col;
     }
 
-    float noise = hash21(uv * 120.0 + u.time * 0.01);
-    float3 base = float3(0.92, 0.86, 0.75) + (noise - 0.5) * 0.03;
+    float3 base = boardTex.sample(samp, uv).rgb;
+    float dust = dustTex.sample(samp, uv * 2.0 + u.time * 0.01).r;
+    base = mix(base, base + (dust - 0.5) * 0.04, 0.35);
 
     float2 distToEdge = min(cellFrac, 1.0 - cellFrac);
     float lineWidth = 0.03;
     float line = step(distToEdge.x, lineWidth) + step(distToEdge.y, lineWidth);
     line = clamp(line, 0.0, 1.0);
 
-    float3 gridColor = float3(0.28, 0.24, 0.2);
-    float3 color = mix(base, gridColor, line * 0.7);
+    float ink = inkTex.sample(samp, uv * 6.0).r;
+    float3 gridColor = float3(0.28, 0.24, 0.2) * mix(0.8, 1.1, ink);
+    float3 color = mix(base, gridColor, line * 0.75);
 
     float legal = legalMask[index];
     if (legal > 0.5) {
@@ -70,9 +77,8 @@ fragment float4 boardFragment(VertexOut in [[stage_in]],
         color = mix(color, float3(0.85, 0.62, 0.25), 0.35);
     }
 
-    float2 centered = uv - 0.5;
-    float vignette = smoothstep(0.85, 0.35, length(centered));
-    color *= vignette;
+    float vignette = vignetteTex.sample(samp, uv).r;
+    color *= mix(1.0, vignette, 0.9);
 
     return float4(color, 1.0);
 }

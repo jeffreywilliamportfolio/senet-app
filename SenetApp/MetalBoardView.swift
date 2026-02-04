@@ -73,6 +73,10 @@ final class MetalBoardRenderer: NSObject, MTKViewDelegate {
     private let vertexBuffer: MTLBuffer
     private let uniformBuffer: MTLBuffer
     private let legalMaskBuffer: MTLBuffer
+    private let boardTexture: MTLTexture
+    private let inkTexture: MTLTexture
+    private let vignetteTexture: MTLTexture
+    private let dustTexture: MTLTexture
 
     private var time: Float = 0
     private var selectedIndex: Int32 = -1
@@ -119,6 +123,17 @@ final class MetalBoardRenderer: NSObject, MTKViewDelegate {
             return nil
         }
 
+        let textureLoader = MTKTextureLoader(device: device)
+        let boardTexture = MetalBoardRenderer.loadTexture(named: "board-surface-texture", loader: textureLoader)
+        let inkTexture = MetalBoardRenderer.loadTexture(named: "grid-line-ink-texture", loader: textureLoader)
+        let vignetteTexture = MetalBoardRenderer.loadTexture(named: "subtle-vignette", loader: textureLoader)
+        let dustTexture = MetalBoardRenderer.loadTexture(named: "ambient-dust-overlay", loader: textureLoader)
+
+        self.boardTexture = boardTexture
+        self.inkTexture = inkTexture
+        self.vignetteTexture = vignetteTexture
+        self.dustTexture = dustTexture
+
         super.init()
     }
 
@@ -161,11 +176,41 @@ final class MetalBoardRenderer: NSObject, MTKViewDelegate {
         encoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
         encoder.setFragmentBuffer(uniformBuffer, offset: 0, index: 0)
         encoder.setFragmentBuffer(legalMaskBuffer, offset: 0, index: 1)
+        encoder.setFragmentTexture(boardTexture, index: 0)
+        encoder.setFragmentTexture(inkTexture, index: 1)
+        encoder.setFragmentTexture(vignetteTexture, index: 2)
+        encoder.setFragmentTexture(dustTexture, index: 3)
         encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 6)
         encoder.endEncoding()
 
         commandBuffer.present(drawable)
         commandBuffer.commit()
+    }
+
+    private static func loadTexture(named name: String, loader: MTKTextureLoader) -> MTLTexture {
+        if let texture = try? loader.newTexture(name: name, scaleFactor: 1.0, bundle: .main, options: [
+            MTKTextureLoader.Option.SRGB: false
+        ]) {
+            return texture
+        }
+
+        let desc = MTLTextureDescriptor.texture2DDescriptor(
+            pixelFormat: .rgba8Unorm,
+            width: 1,
+            height: 1,
+            mipmapped: false
+        )
+        guard let fallback = loader.device.makeTexture(descriptor: desc) else {
+            fatalError("Failed to create fallback texture for \(name)")
+        }
+        var pixel: [UInt8] = [255, 255, 255, 255]
+        fallback.replace(
+            region: MTLRegionMake2D(0, 0, 1, 1),
+            mipmapLevel: 0,
+            withBytes: &pixel,
+            bytesPerRow: 4
+        )
+        return fallback
     }
 }
 
