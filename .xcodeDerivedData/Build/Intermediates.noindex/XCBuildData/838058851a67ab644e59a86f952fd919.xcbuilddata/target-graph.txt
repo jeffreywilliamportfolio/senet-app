@@ -1,0 +1,8 @@
+Target dependency graph (4 targets)
+Target 'SenetAppTests' in project 'SenetApp'
+➜ Explicit dependency on target 'SenetApp' in project 'SenetApp'
+Target 'SenetApp' in project 'SenetApp'
+➜ Explicit dependency on target 'SenetRules' in project 'SenetRules'
+Target 'SenetRules' in project 'SenetRules'
+➜ Explicit dependency on target 'SenetRules' in project 'SenetRules'
+Target 'SenetRules' in project 'SenetRules' (no dependencies)

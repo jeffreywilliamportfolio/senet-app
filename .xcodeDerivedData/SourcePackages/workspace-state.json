@@ -9,12 +9,12 @@
         "packageRef" : {
           "identity" : "senetrules",
           "kind" : "fileSystem",
-          "location" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/SenetRules",
+          "location" : "/Users/jeffreyshorthill/senet-0.0.1/SenetRules",
           "name" : "SenetRules"
         },
         "state" : {
           "name" : "fileSystem",
-          "path" : "/Volumes/ExternalSSD/Projects/senet-0.0.1/SenetRules"
+          "path" : "/Users/jeffreyshorthill/senet-0.0.1/SenetRules"
         },
         "subpath" : "senetrules"
       }

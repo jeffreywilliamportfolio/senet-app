@@ -307,6 +307,14 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 
 #if defined(__OBJC__)
 
+@class UIApplication;
+@class UIWindow;
+SWIFT_CLASS("_TtC8SenetApp11AppDelegate")
+@interface AppDelegate : NSObject <UIApplicationDelegate>
+- (UIInterfaceOrientationMask)application:(UIApplication * _Nonnull)application supportedInterfaceOrientationsForWindow:(UIWindow * _Nullable)window SWIFT_WARN_UNUSED_RESULT;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
 @class NSCoder;
 SWIFT_CLASS("_TtC8SenetApp19FallbackBoardUIView")
 @interface FallbackBoardUIView : UIView

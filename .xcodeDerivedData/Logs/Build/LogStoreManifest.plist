@@ -5,6 +5,49 @@
 	<key>logFormatVersion</key>
 	<integer>12</integer>
 	<key>logs</key>
-	<dict/>
+	<dict>
+		<key>6640D876-DB0D-452E-8577-D4840603C8B7</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>6640D876-DB0D-452E-8577-D4840603C8B7.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+				<key>totalNumberOfAnalyzerIssues</key>
+				<integer>0</integer>
+				<key>totalNumberOfErrors</key>
+				<integer>0</integer>
+				<key>totalNumberOfTestFailures</key>
+				<integer>0</integer>
+				<key>totalNumberOfWarnings</key>
+				<integer>105</integer>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>SenetApp project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>SenetApp</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Testing workspace SenetApp with scheme SenetApp</string>
+			<key>timeStartedRecording</key>
+			<real>791926554.66112196</real>
+			<key>timeStoppedRecording</key>
+			<real>791926565.76766205</real>
+			<key>title</key>
+			<string>Testing workspace SenetApp with scheme SenetApp</string>
+			<key>uniqueIdentifier</key>
+			<string>6640D876-DB0D-452E-8577-D4840603C8B7</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

@@ -93,13 +93,7 @@ struct TutorialPageView: View {
             }
             .padding(20)
             .background(
-                RoundedRectangle(cornerRadius: 22, style: .continuous)
-                    .fill(SenetTheme.cardFill)
-                    .shadow(color: Color.black.opacity(0.08), radius: 18, x: 0, y: 8)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 22, style: .continuous)
-                    .stroke(SenetTheme.cardStroke, lineWidth: 1)
+                SenetCardBackground(cornerRadius: 22, showsOrnaments: true, shadowRadius: 18, shadowY: 8)
             )
         }
     }
@@ -218,7 +212,7 @@ struct TutorialStep: Identifiable {
             TutorialStep(
                 id: 3,
                 title: "Gate and Water",
-                body: "You must land on the gate at 26 before moving beyond it. Landing on water (27) sends you back to the rebirth square (15) or the nearest open square before it.",
+                body: "You must land on the gate at 26 before moving beyond it. Landing on water (27) sends you back to the return square (15) or the nearest open square before it.",
                 board: gateBoard
             ),
             TutorialStep(

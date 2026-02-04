@@ -6,8 +6,7 @@ struct ContentView: View {
 
     var body: some View {
         ZStack {
-            SenetTheme.background
-                .ignoresSafeArea()
+            SenetBackdropView()
 
             switch viewModel.stage {
             case .setup:
@@ -301,6 +300,18 @@ struct SetupView: View {
                     .tracking(2)
             }
 
+            HStack(spacing: 14) {
+                Image("player-token-a")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 36, height: 36)
+                Image("player-token-b")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 36, height: 36)
+            }
+            .padding(.top, 2)
+
             VStack(alignment: .leading, spacing: 16) {
                 Text("Player name")
                     .font(.system(size: 16, weight: .semibold, design: .serif))
@@ -352,16 +363,11 @@ struct SetupView: View {
                         .buttonStyle(.plain)
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .center)
             }
             .padding(20)
             .background(
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .fill(SenetTheme.cardFill)
-                    .shadow(color: Color.black.opacity(0.08), radius: 20, x: 0, y: 8)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .stroke(SenetTheme.cardStroke, lineWidth: 1)
+                SenetCardBackground(cornerRadius: 20, showsOrnaments: true, shadowRadius: 20, shadowY: 8)
             )
 
             VStack(spacing: 12) {
@@ -527,6 +533,10 @@ struct GameControlsView: View {
 
             Spacer()
         }
+        .padding(16)
+        .background(
+            SenetCardBackground(cornerRadius: 18, showsOrnaments: false, shadowRadius: 16, shadowY: 6)
+        )
     }
 }
 
@@ -569,6 +579,10 @@ struct GameControlsInlineView: View {
                     )
             }
         }
+        .padding(14)
+        .background(
+            SenetCardBackground(cornerRadius: 16, showsOrnaments: false, shadowRadius: 14, shadowY: 6)
+        )
     }
 }
 
@@ -836,6 +850,95 @@ struct WaterPenaltySweepOverlay: View {
     RootView()
 }
 #endif
+
+struct SenetBackdropView: View {
+    var body: some View {
+        ZStack {
+            SenetTheme.background
+
+            Image("board-surface-texture")
+                .resizable()
+                .scaledToFill()
+                .opacity(0.28)
+                .blendMode(.multiply)
+
+            Image("ambient-dust-overlay")
+                .resizable()
+                .scaledToFill()
+                .opacity(0.22)
+                .blendMode(.softLight)
+
+            Image("subtle-vignette")
+                .resizable()
+                .scaledToFill()
+                .opacity(0.45)
+                .blendMode(.multiply)
+        }
+        .ignoresSafeArea()
+    }
+}
+
+struct SenetCardBackground: View {
+    var cornerRadius: CGFloat = 20
+    var showsOrnaments: Bool = false
+    var shadowRadius: CGFloat = 18
+    var shadowY: CGFloat = 8
+
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .fill(SenetTheme.cardFill)
+
+            Image("board-surface-texture")
+                .resizable()
+                .scaledToFill()
+                .opacity(0.2)
+                .blendMode(.multiply)
+
+            Image("ambient-dust-overlay")
+                .resizable()
+                .scaledToFill()
+                .opacity(0.2)
+                .blendMode(.softLight)
+
+            Image("subtle-vignette")
+                .resizable()
+                .scaledToFill()
+                .opacity(0.35)
+                .blendMode(.multiply)
+
+            if showsOrnaments {
+                ornamentLayer
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .stroke(SenetTheme.cardStroke, lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.08), radius: shadowRadius, x: 0, y: shadowY)
+    }
+
+    private var ornamentLayer: some View {
+        ZStack {
+            ornament(alignment: .topLeading, rotation: 0)
+            ornament(alignment: .topTrailing, rotation: 90)
+            ornament(alignment: .bottomTrailing, rotation: 180)
+            ornament(alignment: .bottomLeading, rotation: 270)
+        }
+        .padding(10)
+        .opacity(0.25)
+    }
+
+    private func ornament(alignment: Alignment, rotation: Double) -> some View {
+        Image("corner-ornament")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 26, height: 26)
+            .rotationEffect(.degrees(rotation))
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
+    }
+}
 
 enum SenetTheme {
     static let background = LinearGradient(
