@@ -55,6 +55,9 @@ final class GameViewModel: ObservableObject {
     @Published var currentThrow: Int?
     @Published var selectedPieceID: PieceID?
     @Published var legalMoves: [Move] = []
+    @Published var captureFlashSquare: Int?
+    @Published var waterSweepToken: UUID?
+    @Published var isWaterSweepActive: Bool = false
 
     private var computerTurnToken = 0
 
@@ -92,6 +95,9 @@ final class GameViewModel: ObservableObject {
         selectedPieceID = nil
         legalMoves = []
         undoStack = []
+        captureFlashSquare = nil
+        waterSweepToken = nil
+        isWaterSweepActive = false
         computerTurnToken += 1
         stage = .game
     }
@@ -156,6 +162,7 @@ final class GameViewModel: ObservableObject {
         pushUndoSnapshot()
         let result = SenetRules.reduce(state: state, action: .applyThrow(value: throwValue, pieceID: move.pieceID))
         state = result.0
+        handleEvents(result.1)
         clearSelection()
 
         if state.currentPlayer == .computer && state.status == .inProgress {
@@ -167,6 +174,7 @@ final class GameViewModel: ObservableObject {
         pushUndoSnapshot()
         let result = SenetRules.reduce(state: state, action: .forfeitTurn(value: throwValue))
         state = result.0
+        handleEvents(result.1)
         clearSelection()
 
         if state.currentPlayer == .computer && state.status == .inProgress {
@@ -195,9 +203,11 @@ final class GameViewModel: ObservableObject {
         if let move = moves.randomElement() {
             let result = SenetRules.reduce(state: state, action: .applyThrow(value: throwValue, pieceID: move.pieceID))
             state = result.0
+            handleEvents(result.1)
         } else {
             let result = SenetRules.reduce(state: state, action: .forfeitTurn(value: throwValue))
             state = result.0
+            handleEvents(result.1)
         }
 
         clearSelection()
@@ -211,6 +221,42 @@ final class GameViewModel: ObservableObject {
         currentThrow = nil
         selectedPieceID = nil
         legalMoves = []
+    }
+
+    private func handleEvents(_ events: [Event]) {
+        let movedSquare: Int? = events.compactMap { event in
+            if case .pieceMoved(let move) = event {
+                return move.to
+            }
+            return nil
+        }.last
+
+        if events.contains(where: { if case .swapCaptured = $0 { return true } else { return false } }),
+           let target = movedSquare, (1...30).contains(target) {
+            triggerCaptureFlash(at: target)
+        }
+
+        if events.contains(where: { if case .waterPenalty = $0 { return true } else { return false } }) {
+            triggerWaterSweep()
+        }
+    }
+
+    private func triggerCaptureFlash(at square: Int) {
+        captureFlashSquare = square
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) { [weak self] in
+            guard let self else { return }
+            if self.captureFlashSquare == square {
+                self.captureFlashSquare = nil
+            }
+        }
+    }
+
+    private func triggerWaterSweep() {
+        waterSweepToken = UUID()
+        isWaterSweepActive = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { [weak self] in
+            self?.isWaterSweepActive = false
+        }
     }
 
     private func pushUndoSnapshot() {
@@ -352,6 +398,9 @@ struct GameView: View {
                         selectedPieceID: viewModel.selectedPieceID,
                         legalDestinations: viewModel.visibleLegalDestinations,
                         movablePieceIDs: viewModel.movablePieceIDs,
+                        captureFlashSquare: viewModel.captureFlashSquare,
+                        waterSweepToken: viewModel.waterSweepToken,
+                        isWaterSweepActive: viewModel.isWaterSweepActive,
                         humanColor: viewModel.humanColor,
                         computerColor: viewModel.computerColor,
                         onSquareTap: viewModel.handleTap
@@ -371,6 +420,9 @@ struct GameView: View {
                         selectedPieceID: viewModel.selectedPieceID,
                         legalDestinations: viewModel.visibleLegalDestinations,
                         movablePieceIDs: viewModel.movablePieceIDs,
+                        captureFlashSquare: viewModel.captureFlashSquare,
+                        waterSweepToken: viewModel.waterSweepToken,
+                        isWaterSweepActive: viewModel.isWaterSweepActive,
                         humanColor: viewModel.humanColor,
                         computerColor: viewModel.computerColor,
                         onSquareTap: viewModel.handleTap
@@ -522,6 +574,9 @@ struct BoardView: View {
     let selectedPieceID: PieceID?
     let legalDestinations: Set<Int>
     let movablePieceIDs: Set<PieceID>
+    let captureFlashSquare: Int?
+    let waterSweepToken: UUID?
+    let isWaterSweepActive: Bool
     let humanColor: Color
     let computerColor: Color
     let onSquareTap: (Int) -> Void
@@ -543,6 +598,15 @@ struct BoardView: View {
             )
             .allowsHitTesting(false)
 
+            BoardFrameOverlay()
+                .allowsHitTesting(false)
+
+            if isWaterSweepActive, let waterSweepToken {
+                WaterPenaltySweepOverlay()
+                    .id(waterSweepToken)
+                    .allowsHitTesting(false)
+            }
+
             LazyVGrid(columns: columns, spacing: 0) {
                 ForEach(displaySquares, id: \.self) { square in
                     SquareView(
@@ -551,6 +615,7 @@ struct BoardView: View {
                         isSelected: isSelected(square: square),
                         isLegalDestination: legalDestinations.contains(square),
                         isMovable: isMovable(square: square),
+                        captureFlashSquare: captureFlashSquare,
                         humanColor: humanColor,
                         computerColor: computerColor
                     )
@@ -595,12 +660,21 @@ struct SquareView: View {
     let isSelected: Bool
     let isLegalDestination: Bool
     let isMovable: Bool
+    let captureFlashSquare: Int?
     let humanColor: Color
     let computerColor: Color
 
     var body: some View {
         ZStack {
             Color.clear
+
+            if let glyphName = specialGlyphName(for: square) {
+                Image(glyphName)
+                    .resizable()
+                    .scaledToFit()
+                    .opacity(0.28)
+                    .padding(14)
+            }
 
             if isMovable && !isSelected {
                 Circle()
@@ -630,6 +704,14 @@ struct SquareView: View {
                     .shadow(color: Color.black.opacity(0.2), radius: 6, x: 0, y: 3)
             }
 
+            if captureFlashSquare == square {
+                Image("capture-swap-flash")
+                    .resizable()
+                    .scaledToFit()
+                    .opacity(0.7)
+                    .padding(6)
+            }
+
             Text("\(square)")
                 .font(.caption2)
                 .foregroundColor(SenetTheme.mutedInk.opacity(0.7))
@@ -637,6 +719,112 @@ struct SquareView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
         .aspectRatio(1, contentMode: .fit)
+    }
+
+    private func specialGlyphName(for square: Int) -> String? {
+        switch square {
+        case SenetRules.rebirthSquare:
+            return "special-glyph-01"
+        case SenetRules.gateSquare:
+            return "special-glyph-02"
+        case SenetRules.waterSquare:
+            return "special-glyph-03"
+        case 28:
+            return "special-glyph-04"
+        case 29:
+            return "special-glyph-05"
+        default:
+            return nil
+        }
+    }
+}
+
+struct BoardFrameOverlay: View {
+    var body: some View {
+        GeometryReader { proxy in
+            let size = proxy.size
+            let stripHeight = max(10, size.height * 0.08)
+            let cornerSize = stripHeight * 2.1
+
+            let strip = Image("chevron-border-strip")
+                .resizable(resizingMode: .tile)
+
+            ZStack {
+                strip
+                    .frame(width: size.width, height: stripHeight)
+                    .position(x: size.width / 2, y: stripHeight / 2)
+
+                strip
+                    .frame(width: size.width, height: stripHeight)
+                    .rotationEffect(.degrees(180))
+                    .position(x: size.width / 2, y: size.height - stripHeight / 2)
+
+                strip
+                    .frame(width: size.height, height: stripHeight)
+                    .rotationEffect(.degrees(90))
+                    .position(x: stripHeight / 2, y: size.height / 2)
+
+                strip
+                    .frame(width: size.height, height: stripHeight)
+                    .rotationEffect(.degrees(-90))
+                    .position(x: size.width - stripHeight / 2, y: size.height / 2)
+
+                Image("corner-ornament")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: cornerSize, height: cornerSize)
+                    .opacity(0.65)
+                    .position(x: cornerSize * 0.45, y: cornerSize * 0.45)
+
+                Image("corner-ornament")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: cornerSize, height: cornerSize)
+                    .rotationEffect(.degrees(90))
+                    .opacity(0.65)
+                    .position(x: size.width - cornerSize * 0.45, y: cornerSize * 0.45)
+
+                Image("corner-ornament")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: cornerSize, height: cornerSize)
+                    .rotationEffect(.degrees(180))
+                    .opacity(0.65)
+                    .position(x: size.width - cornerSize * 0.45, y: size.height - cornerSize * 0.45)
+
+                Image("corner-ornament")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: cornerSize, height: cornerSize)
+                    .rotationEffect(.degrees(270))
+                    .opacity(0.65)
+                    .position(x: cornerSize * 0.45, y: size.height - cornerSize * 0.45)
+            }
+        }
+    }
+}
+
+struct WaterPenaltySweepOverlay: View {
+    @State private var animate = false
+
+    var body: some View {
+        GeometryReader { proxy in
+            let size = proxy.size
+            let bandHeight = max(24, size.height * 0.35)
+
+            Image("water-penalty-sweep")
+                .resizable()
+                .scaledToFill()
+                .frame(width: size.width * 1.3, height: bandHeight)
+                .opacity(0.55)
+                .offset(x: animate ? size.width * 0.65 : -size.width * 0.65,
+                        y: (size.height - bandHeight) * 0.5)
+                .onAppear {
+                    withAnimation(.easeInOut(duration: 0.55)) {
+                        animate = true
+                    }
+                }
+        }
     }
 }
 
