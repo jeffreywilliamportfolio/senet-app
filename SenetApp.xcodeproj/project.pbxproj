@@ -11,12 +11,11 @@
 		15291B16F9E5E9396BDF4B91 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6C86F17BF81390FC45ABC0 /* RootView.swift */; };
 		16A2FC6F019D4446BC7BA15E /* MetalBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B61A6C4E2164058B0E7A9D3 /* MetalBoardView.swift */; };
 		4F5B83DDBE7E42D1AFE254EF /* SenetRules in Frameworks */ = {isa = PBXBuildFile; productRef = 9D55625179DF4B13BEFBF857 /* SenetRules */; };
+		6E97087A98C44012A1B58BBB /* SenetAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3F46227CB34DD0A71392F2 /* SenetAppTests.swift */; };
 		6A2D5C97AEEF4AE7BB4B72AD /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 8B74A950FB1A4C988CA4F8B8 /* Shaders.metal */; };
 		84EFB7B2488145F3A96D5AD1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B7F527E89DDD4A40A4886D32 /* Assets.xcassets */; };
 		856FCEA2E6D9640B727FF778 /* RulesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D65C8658B468E4BBD8B42E4 /* RulesView.swift */; };
-		91694F6AE7207269C6420765 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		92D250DDB2274CFB85583781 /* SenetAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48295BFE2FE41E2AE1E0FFC /* SenetAppApp.swift */; };
-		A9B2B53560E9EE68FE42921A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		D8E9A4A76AD342098452C6D5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D0C1CEADD641EE9713D647 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +32,7 @@
 /* Begin PBXFileReference section */
 		0D65C8658B468E4BBD8B42E4 /* RulesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesView.swift; sourceTree = "<group>"; };
 		20A64CE51CF245D8B0E657EA /* SenetApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SenetApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F3F46227CB34DD0A71392F2 /* SenetAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SenetAppTests.swift; sourceTree = "<group>"; };
 		4B61A6C4E2164058B0E7A9D3 /* MetalBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalBoardView.swift; sourceTree = "<group>"; };
 		82D0C1CEADD641EE9713D647 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		85516910AB8B4DBB884A50F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -40,6 +40,7 @@
 		8B74A950FB1A4C988CA4F8B8 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		B7F527E89DDD4A40A4886D32 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C48295BFE2FE41E2AE1E0FFC /* SenetAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SenetAppApp.swift; sourceTree = "<group>"; };
+		D1C572ECEC8347E99A57D738 /* SenetAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SenetAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D216CF7217C269A579DF8247 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -48,7 +49,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9B2B53560E9EE68FE42921A /* (null) in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				20A64CE51CF245D8B0E657EA /* SenetApp.app */,
+				D1C572ECEC8347E99A57D738 /* SenetAppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -107,6 +108,7 @@
 		ECCCDD30E9D83D4A370F989C /* SenetAppTests */ = {
 			isa = PBXGroup;
 			children = (
+				4F3F46227CB34DD0A71392F2 /* SenetAppTests.swift */,
 			);
 			path = SenetAppTests;
 			sourceTree = "<group>";
@@ -149,6 +151,7 @@
 			);
 			name = SenetAppTests;
 			productName = SenetAppTests;
+			productReference = D1C572ECEC8347E99A57D738 /* SenetAppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -214,7 +217,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				91694F6AE7207269C6420765 /* (null) in Sources */,
+				6E97087A98C44012A1B58BBB /* SenetAppTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
