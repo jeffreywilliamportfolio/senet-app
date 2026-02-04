@@ -227,7 +227,9 @@ public enum SenetRules {
 
         guard to > from else { return false }
         for square in (from + 1)...to {
-            if positionSet.contains(square) && positionSet.contains(square + 1) {
+            if positionSet.contains(square),
+               positionSet.contains(square + 1),
+               positionSet.contains(square + 2) {
                 return true
             }
         }

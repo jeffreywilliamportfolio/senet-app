@@ -288,107 +288,120 @@ struct SetupView: View {
     @ObservedObject var viewModel: GameViewModel
 
     var body: some View {
-        VStack(spacing: 24) {
-            VStack(spacing: 8) {
-                Text("Senet")
-                    .font(.system(size: 42, weight: .semibold, design: .serif))
-                    .foregroundColor(SenetTheme.ink)
-                Text("Core mechanics")
-                    .font(.system(size: 14, weight: .medium, design: .serif))
-                    .foregroundColor(SenetTheme.mutedInk)
-                    .textCase(.uppercase)
-                    .tracking(2)
-            }
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 22) {
+                VStack(spacing: 10) {
+                    Text("Senet")
+                        .font(.system(size: 34, weight: .semibold, design: .serif))
+                        .foregroundColor(SenetTheme.ink)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
 
-            HStack(spacing: 14) {
-                Image("player-token-a")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 36, height: 36)
-                Image("player-token-b")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 36, height: 36)
-            }
-            .padding(.top, 2)
+                    Text("Core mechanics")
+                        .font(.system(size: 13, weight: .medium, design: .serif))
+                        .foregroundColor(SenetTheme.mutedInk)
+                        .textCase(.uppercase)
+                        .tracking(2)
 
-            VStack(alignment: .leading, spacing: 16) {
-                Text("Player name")
-                    .font(.system(size: 16, weight: .semibold, design: .serif))
-                    .foregroundColor(SenetTheme.ink)
-
-                TextField("Enter your name", text: $viewModel.playerName)
-                    .padding(12)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .fill(SenetTheme.cardFill)
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .stroke(SenetTheme.cardStroke, lineWidth: 1)
-                    )
-
-                Text("Piece color")
-                    .font(.system(size: 16, weight: .semibold, design: .serif))
-                    .foregroundColor(SenetTheme.ink)
-
-                HStack(spacing: 12) {
-                    ForEach(GameViewModel.PlayerColor.allCases) { color in
-                        Button {
-                            viewModel.playerColor = color
-                        } label: {
-                            HStack(spacing: 8) {
-                                Circle()
-                                    .fill(color == .light ? Color(white: 0.93) : Color(white: 0.15))
-                                    .frame(width: 22, height: 22)
-                                    .overlay(
-                                        Circle()
-                                            .stroke(Color.black.opacity(0.2), lineWidth: 1)
-                                    )
-                                Text(color.rawValue.capitalized)
-                                    .font(.system(size: 14, weight: .semibold, design: .serif))
-                                    .foregroundColor(SenetTheme.ink)
-                            }
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 10)
-                            .background(
-                                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                    .fill(viewModel.playerColor == color ? SenetTheme.accent : SenetTheme.cardFill)
-                            )
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                    .stroke(SenetTheme.cardStroke, lineWidth: 1)
-                            )
-                        }
-                        .buttonStyle(.plain)
+                    HStack(spacing: 14) {
+                        Image("player-token-a")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 34, height: 34)
+                        Image("player-token-b")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 34, height: 34)
                     }
+                    .padding(.top, 2)
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(18)
+                .background(
+                    SenetCardBackground(cornerRadius: 22, showsOrnaments: true, shadowRadius: 18, shadowY: 8)
+                )
+
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Player name")
+                        .font(.system(size: 16, weight: .semibold, design: .serif))
+                        .foregroundColor(SenetTheme.ink)
+
+                    TextField("Enter your name", text: $viewModel.playerName)
+                        .padding(12)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                .fill(SenetTheme.cardFill)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                .stroke(SenetTheme.cardStroke, lineWidth: 1)
+                        )
+
+                    Text("Piece color")
+                        .font(.system(size: 16, weight: .semibold, design: .serif))
+                        .foregroundColor(SenetTheme.ink)
+
+                    HStack(spacing: 12) {
+                        ForEach(GameViewModel.PlayerColor.allCases) { color in
+                            Button {
+                                viewModel.playerColor = color
+                            } label: {
+                                HStack(spacing: 8) {
+                                    Circle()
+                                        .fill(color == .light ? Color(white: 0.93) : Color(white: 0.15))
+                                        .frame(width: 22, height: 22)
+                                        .overlay(
+                                            Circle()
+                                                .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                                        )
+                                    Text(color.rawValue.capitalized)
+                                        .font(.system(size: 14, weight: .semibold, design: .serif))
+                                        .foregroundColor(SenetTheme.ink)
+                                }
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 10)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                        .fill(viewModel.playerColor == color ? SenetTheme.accent : SenetTheme.cardFill)
+                                )
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                        .stroke(SenetTheme.cardStroke, lineWidth: 1)
+                                )
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                }
+                .padding(20)
+                .background(
+                    SenetCardBackground(cornerRadius: 20, showsOrnaments: true, shadowRadius: 20, shadowY: 8)
+                )
+
+                VStack(spacing: 12) {
+                    Button("Start Game") {
+                        viewModel.startGame()
+                    }
+                    .buttonStyle(SenetPrimaryButtonStyle())
+                    .disabled(viewModel.playerName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+
+                    Button("How To Play") {
+                        viewModel.showTutorial()
+                    }
+                    .buttonStyle(SenetSecondaryButtonStyle())
+
+                    Button("Rules") {
+                        viewModel.showRules()
+                    }
+                    .buttonStyle(SenetSecondaryButtonStyle())
+                }
             }
-            .padding(20)
-            .background(
-                SenetCardBackground(cornerRadius: 20, showsOrnaments: true, shadowRadius: 20, shadowY: 8)
-            )
-
-            VStack(spacing: 12) {
-                Button("Start Game") {
-                    viewModel.startGame()
-                }
-                .buttonStyle(SenetPrimaryButtonStyle())
-                .disabled(viewModel.playerName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-
-                Button("How To Play") {
-                    viewModel.showTutorial()
-                }
-                .buttonStyle(SenetSecondaryButtonStyle())
-
-                Button("Rules") {
-                    viewModel.showRules()
-                }
-                .buttonStyle(SenetSecondaryButtonStyle())
-            }
+            .frame(maxWidth: .infinity)
+            .padding(.top, 18)
+            .padding(.horizontal, 24)
+            .padding(.bottom, 32)
         }
-        .padding(24)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
 }
 

@@ -61,11 +61,12 @@ private func piece(id: Int, in state: GameState) -> PieceState? {
     let pieces = [
         makePiece(0, owner: .human, position: 1),
         makePiece(100, owner: .computer, position: 3),
-        makePiece(101, owner: .computer, position: 4)
+        makePiece(101, owner: .computer, position: 4),
+        makePiece(102, owner: .computer, position: 5)
     ]
     let state = makeState(pieces: pieces)
-    let moves = SenetRules.legalMoves(state: state, throwValue: 4, for: .human)
-    let blocked = moves.contains(where: { $0.from == 1 && $0.to == 5 })
+    let moves = SenetRules.legalMoves(state: state, throwValue: 5, for: .human)
+    let blocked = moves.contains(where: { $0.from == 1 && $0.to == 6 })
     #expect(!blocked)
 }
 
@@ -74,11 +75,12 @@ private func piece(id: Int, in state: GameState) -> PieceState? {
         makePiece(0, owner: .human, position: 1),
         makePiece(1, owner: .human, position: 3),
         makePiece(2, owner: .human, position: 4),
+        makePiece(3, owner: .human, position: 5),
         makePiece(100, owner: .computer, position: 10)
     ]
     let state = makeState(pieces: pieces)
-    let moves = SenetRules.legalMoves(state: state, throwValue: 4, for: .human)
-    let allowed = moves.contains(where: { $0.from == 1 && $0.to == 5 })
+    let moves = SenetRules.legalMoves(state: state, throwValue: 5, for: .human)
+    let allowed = moves.contains(where: { $0.from == 1 && $0.to == 6 })
     #expect(allowed)
 }
 
