@@ -364,10 +364,10 @@ struct GameView: View {
                     }
                 }
                 .frame(width: safeSize.width, height: safeSize.height)
-                // Center horizontally in the full screen while still respecting vertical safe area.
-                // This avoids the layout looking left-shifted when the trailing inset is larger.
+                // Center within the safe area to avoid drifting into unsafe regions on devices
+                // with asymmetric horizontal insets (e.g. notched iPhones in landscape).
                 .position(
-                    x: proxy.size.width / 2,
+                    x: insets.leading + safeSize.width / 2,
                     y: insets.top + safeSize.height / 2
                 )
             } else {
