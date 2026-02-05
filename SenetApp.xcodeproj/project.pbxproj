@@ -14,6 +14,7 @@
 		6E97087A98C44012A1B58BBB /* SenetAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3F46227CB34DD0A71392F2 /* SenetAppTests.swift */; };
 		6A2D5C97AEEF4AE7BB4B72AD /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 8B74A950FB1A4C988CA4F8B8 /* Shaders.metal */; };
 		84EFB7B2488145F3A96D5AD1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B7F527E89DDD4A40A4886D32 /* Assets.xcassets */; };
+		8D1A6E5E0B2E4F2C9C3F5A21 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F2C0E3D9B1D84B1A9E2E5C1A /* LaunchScreen.storyboard */; };
 		856FCEA2E6D9640B727FF778 /* RulesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D65C8658B468E4BBD8B42E4 /* RulesView.swift */; };
 		92D250DDB2274CFB85583781 /* SenetAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48295BFE2FE41E2AE1E0FFC /* SenetAppApp.swift */; };
 		D8E9A4A76AD342098452C6D5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D0C1CEADD641EE9713D647 /* ContentView.swift */; };
@@ -42,6 +43,7 @@
 		C48295BFE2FE41E2AE1E0FFC /* SenetAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SenetAppApp.swift; sourceTree = "<group>"; };
 		D1C572ECEC8347E99A57D738 /* SenetAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SenetAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D216CF7217C269A579DF8247 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
+		F2C0E3D9B1D84B1A9E2E5C1A /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 				4B61A6C4E2164058B0E7A9D3 /* MetalBoardView.swift */,
 				8B74A950FB1A4C988CA4F8B8 /* Shaders.metal */,
 				B7F527E89DDD4A40A4886D32 /* Assets.xcassets */,
+				F2C0E3D9B1D84B1A9E2E5C1A /* LaunchScreen.storyboard */,
 				C48295BFE2FE41E2AE1E0FFC /* SenetAppApp.swift */,
 				82D0C1CEADD641EE9713D647 /* ContentView.swift */,
 				8B6C86F17BF81390FC45ABC0 /* RootView.swift */,
@@ -207,6 +210,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				84EFB7B2488145F3A96D5AD1 /* Assets.xcassets in Resources */,
+				8D1A6E5E0B2E4F2C9C3F5A21 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

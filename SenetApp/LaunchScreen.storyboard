@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="26200" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="k7y-ws-V7Q">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="Xwq-UM-yfr">
+            <objects>
+                <viewController id="k7y-ws-V7Q" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="hVj-Tw-7v5">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView contentMode="scaleAspectFill" clipsSubviews="YES" translatesAutoresizingMaskIntoConstraints="NO" image="LaunchScreenImage" id="rBv-2c-4qf">
+                                <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                            </imageView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="rBv-2c-4qf" firstAttribute="leading" secondItem="hVj-Tw-7v5" secondAttribute="leading" id="Edd-8k-2D7"/>
+                            <constraint firstAttribute="trailing" secondItem="rBv-2c-4qf" secondAttribute="trailing" id="RyY-4K-P8E"/>
+                            <constraint firstItem="rBv-2c-4qf" firstAttribute="top" secondItem="hVj-Tw-7v5" secondAttribute="top" id="wC1-0g-9x1"/>
+                            <constraint firstAttribute="bottom" secondItem="rBv-2c-4qf" secondAttribute="bottom" id="yXH-Uo-PwC"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="rK7-3i-8rB"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0nG-sQ-7g2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="LaunchScreenImage" width="1024" height="1536"/>
+    </resources>
+</document>
