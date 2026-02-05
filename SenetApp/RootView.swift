@@ -41,9 +41,10 @@ struct RootView: View {
         let requestedMask: UIInterfaceOrientationMask
         switch stage {
         case .game:
-            // Gameplay is landscape-only and intentionally locked to landscape-right.
-            supportedMask = .landscapeRight
-            requestedMask = .landscapeRight
+            // Gameplay is landscape-only. Allow both landscape orientations so the UI
+            // stays "right-side up" regardless of how the user turns their phone.
+            supportedMask = .landscape
+            requestedMask = .landscape
         case .setup, .tutorial, .rules:
             supportedMask = .portrait
             requestedMask = .portrait

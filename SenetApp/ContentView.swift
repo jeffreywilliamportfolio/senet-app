@@ -51,7 +51,8 @@ final class GameViewModel: ObservableObject {
     }
 
     @Published var stage: Stage = .setup
-    @Published var playerName: String = ""
+    // Default the setup name to "Player" (user can tap to clear and enter their own).
+    @Published var playerName: String = "Player"
     @Published var playerColor: PlayerColor = .light
     @Published private(set) var undoStack: [UndoSnapshot] = []
 
@@ -300,6 +301,7 @@ final class GameViewModel: ObservableObject {
 
 struct SetupView: View {
     @ObservedObject var viewModel: GameViewModel
+    @State private var hasClearedDefaultName = false
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -340,6 +342,12 @@ struct SetupView: View {
                         .foregroundColor(SenetTheme.ink)
 
                     TextField("Enter your name", text: $viewModel.playerName)
+                        .onTapGesture {
+                            if !hasClearedDefaultName, viewModel.playerName == "Player" {
+                                viewModel.playerName = ""
+                                hasClearedDefaultName = true
+                            }
+                        }
                         .padding(12)
                         .background(
                             RoundedRectangle(cornerRadius: 12, style: .continuous)
