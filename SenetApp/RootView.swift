@@ -3,15 +3,37 @@ import UIKit
 
 struct RootView: View {
     @StateObject private var viewModel = GameViewModel()
+    @State private var isShowingSplash = true
 
     var body: some View {
-        ContentView(viewModel: viewModel)
-            .onAppear {
-                applyOrientation(for: viewModel.stage)
+        ZStack {
+            ContentView(viewModel: viewModel)
+                .onAppear {
+                    if !isShowingSplash {
+                        applyOrientation(for: viewModel.stage)
+                    }
+                }
+                .onChange(of: viewModel.stage) { _, newStage in
+                    if !isShowingSplash {
+                        applyOrientation(for: newStage)
+                    }
+                }
+
+            if isShowingSplash {
+                SplashScreenView()
+                    .transition(.opacity)
+                    .onAppear {
+                        applyOrientation(for: .setup)
+
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
+                            withAnimation(.easeOut(duration: 0.25)) {
+                                isShowingSplash = false
+                            }
+                            applyOrientation(for: viewModel.stage)
+                        }
+                    }
             }
-            .onChange(of: viewModel.stage) { _, newStage in
-                applyOrientation(for: newStage)
-            }
+        }
     }
 
     private func applyOrientation(for stage: GameViewModel.Stage) {
@@ -19,7 +41,8 @@ struct RootView: View {
         let requestedMask: UIInterfaceOrientationMask
         switch stage {
         case .game:
-            supportedMask = .landscape
+            // Gameplay is landscape-only and intentionally locked to landscape-right.
+            supportedMask = .landscapeRight
             requestedMask = .landscapeRight
         case .setup, .tutorial, .rules:
             supportedMask = .portrait
@@ -42,6 +65,10 @@ struct RootView: View {
         guard let window = windowScene.windows.first(where: { $0.isKeyWindow }),
               let root = window.rootViewController else { return }
         root.setNeedsUpdateOfSupportedInterfaceOrientations()
-        UIViewController.attemptRotationToDeviceOrientation()
+        if #available(iOS 16.0, *) {
+            // `setNeedsUpdateOfSupportedInterfaceOrientations()` is enough on iOS 16+.
+        } else {
+            UIViewController.attemptRotationToDeviceOrientation()
+        }
     }
 }

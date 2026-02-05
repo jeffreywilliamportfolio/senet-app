@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0FE4F6C0CC0CAAAD333C45F9 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D216CF7217C269A579DF8247 /* TutorialView.swift */; };
+		0D647E7600F341089FC3DD0F /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA267597F6D34910AEB9F80A /* SplashScreenView.swift */; };
 		15291B16F9E5E9396BDF4B91 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6C86F17BF81390FC45ABC0 /* RootView.swift */; };
 		16A2FC6F019D4446BC7BA15E /* MetalBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B61A6C4E2164058B0E7A9D3 /* MetalBoardView.swift */; };
 		4F5B83DDBE7E42D1AFE254EF /* SenetRules in Frameworks */ = {isa = PBXBuildFile; productRef = 9D55625179DF4B13BEFBF857 /* SenetRules */; };
@@ -43,6 +44,7 @@
 		C48295BFE2FE41E2AE1E0FFC /* SenetAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SenetAppApp.swift; sourceTree = "<group>"; };
 		D1C572ECEC8347E99A57D738 /* SenetAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SenetAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D216CF7217C269A579DF8247 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
+		FA267597F6D34910AEB9F80A /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 		F2C0E3D9B1D84B1A9E2E5C1A /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -75,6 +77,7 @@
 				C48295BFE2FE41E2AE1E0FFC /* SenetAppApp.swift */,
 				82D0C1CEADD641EE9713D647 /* ContentView.swift */,
 				8B6C86F17BF81390FC45ABC0 /* RootView.swift */,
+				FA267597F6D34910AEB9F80A /* SplashScreenView.swift */,
 				D216CF7217C269A579DF8247 /* TutorialView.swift */,
 				0D65C8658B468E4BBD8B42E4 /* RulesView.swift */,
 				85516910AB8B4DBB884A50F5 /* Info.plist */,
@@ -232,6 +235,7 @@
 				92D250DDB2274CFB85583781 /* SenetAppApp.swift in Sources */,
 				D8E9A4A76AD342098452C6D5 /* ContentView.swift in Sources */,
 				15291B16F9E5E9396BDF4B91 /* RootView.swift in Sources */,
+				0D647E7600F341089FC3DD0F /* SplashScreenView.swift in Sources */,
 				0FE4F6C0CC0CAAAD333C45F9 /* TutorialView.swift in Sources */,
 				856FCEA2E6D9640B727FF778 /* RulesView.swift in Sources */,
 				16A2FC6F019D4446BC7BA15E /* MetalBoardView.swift in Sources */,

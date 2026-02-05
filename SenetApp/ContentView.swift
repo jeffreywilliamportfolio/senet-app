@@ -6,7 +6,11 @@ struct ContentView: View {
 
     var body: some View {
         ZStack(alignment: .top) {
-            SenetBackdropView()
+            if viewModel.stage == .setup {
+                SetupBackdropView()
+            } else {
+                SenetBackdropView()
+            }
 
             switch viewModel.stage {
             case .setup:
@@ -90,6 +94,15 @@ final class GameViewModel: ObservableObject {
     }
 
     func startGame() {
+        // Setup blocks starting with an empty name, but keep the model resilient
+        // in case start is triggered from another path.
+        let trimmedName = playerName.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmedName.isEmpty {
+            playerName = "Player"
+        } else if trimmedName != playerName {
+            playerName = trimmedName
+        }
+
         state = SenetRules.newGame()
         currentThrow = nil
         selectedPieceID = nil
@@ -290,30 +303,120 @@ struct SetupView: View {
 
     var body: some View {
         ScrollView(showsIndicators: false) {
-            VStack(spacing: 16) {
-                Color.green
-                    .frame(height: 12)
+            VStack(spacing: 22) {
+                VStack(spacing: 10) {
+                    Text("Senet")
+                        .font(.system(size: 34, weight: .semibold, design: .serif))
+                        .foregroundColor(SenetTheme.ink)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
 
-                Text("SENET TITLE DEBUG")
-                    .font(.system(size: 32, weight: .bold, design: .serif))
-                    .foregroundColor(.red)
-                    .padding(.top, 12)
+                    Text("Core mechanics")
+                        .font(.system(size: 13, weight: .medium, design: .serif))
+                        .foregroundColor(SenetTheme.mutedInk)
+                        .textCase(.uppercase)
+                        .tracking(2)
 
-                Text("SUBTITLE DEBUG")
-                    .font(.system(size: 16, weight: .semibold, design: .serif))
-                    .foregroundColor(.blue)
-
-                Button("Start Game") {
-                    viewModel.startGame()
+                    HStack(spacing: 14) {
+                        Image("player-token-a")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 34, height: 34)
+                        Image("player-token-b")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 34, height: 34)
+                    }
+                    .padding(.top, 2)
                 }
-                .buttonStyle(SenetPrimaryButtonStyle())
+                .padding(18)
+                .background(
+                    SenetCardBackground(cornerRadius: 22, showsOrnaments: true, shadowRadius: 18, shadowY: 8)
+                )
+
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Player name")
+                        .font(.system(size: 16, weight: .semibold, design: .serif))
+                        .foregroundColor(SenetTheme.ink)
+
+                    TextField("Enter your name", text: $viewModel.playerName)
+                        .padding(12)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                .fill(SenetTheme.cardFill)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                .stroke(SenetTheme.cardStroke, lineWidth: 1)
+                        )
+
+                    Text("Piece color")
+                        .font(.system(size: 16, weight: .semibold, design: .serif))
+                        .foregroundColor(SenetTheme.ink)
+
+                    HStack(spacing: 12) {
+                        ForEach(GameViewModel.PlayerColor.allCases) { color in
+                            Button {
+                                viewModel.playerColor = color
+                            } label: {
+                                HStack(spacing: 8) {
+                                    Circle()
+                                        .fill(color == .light ? Color(white: 0.93) : Color(white: 0.15))
+                                        .frame(width: 22, height: 22)
+                                        .overlay(
+                                            Circle()
+                                                .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                                        )
+
+                                    Text(color.rawValue.capitalized)
+                                        .font(.system(size: 14, weight: .semibold, design: .serif))
+                                        .foregroundColor(SenetTheme.ink)
+                                }
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 10)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                        .fill(viewModel.playerColor == color ? SenetTheme.accent : SenetTheme.cardFill)
+                                )
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                        .stroke(SenetTheme.cardStroke, lineWidth: 1)
+                                )
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                }
+                .padding(20)
+                .background(
+                    SenetCardBackground(cornerRadius: 20, showsOrnaments: true, shadowRadius: 20, shadowY: 8)
+                )
+
+                VStack(spacing: 12) {
+                    Button("Start Game") {
+                        viewModel.startGame()
+                    }
+                    .buttonStyle(SenetPrimaryButtonStyle())
+                    .disabled(viewModel.playerName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+
+                    Button("How To Play") {
+                        viewModel.showTutorial()
+                    }
+                    .buttonStyle(SenetSecondaryButtonStyle())
+
+                    Button("Rules") {
+                        viewModel.showRules()
+                    }
+                    .buttonStyle(SenetSecondaryButtonStyle())
+                }
             }
-            .frame(maxWidth: .infinity, alignment: .top)
-            .padding(.top, 24)
+            .frame(maxWidth: .infinity)
+            .padding(.top, 18)
             .padding(.horizontal, 24)
             .padding(.bottom, 32)
         }
-        .background(Color.yellow.opacity(0.2))
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
 }
 
@@ -371,7 +474,6 @@ struct GameView: View {
                     y: insets.top + safeSize.height / 2
                 )
             } else {
-                let boardSize = boardSize(in: proxy.size)
                 VStack(spacing: 16) {
                     GameHeaderView(viewModel: viewModel)
 
@@ -414,10 +516,15 @@ struct GameView: View {
 struct GameHeaderView: View {
     @ObservedObject var viewModel: GameViewModel
 
+    private var displayPlayerName: String {
+        let trimmed = viewModel.playerName.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? "Player" : trimmed
+    }
+
     var body: some View {
         HStack(alignment: .center, spacing: 16) {
             VStack(alignment: .leading, spacing: 4) {
-                Text(viewModel.state.currentPlayer == .human ? viewModel.playerName : "Computer")
+                Text(viewModel.state.currentPlayer == .human ? displayPlayerName : "Computer")
                     .font(.system(size: 20, weight: .semibold, design: .serif))
                     .foregroundColor(SenetTheme.ink)
                 Text(viewModel.state.currentPlayer == .human ? "Your turn" : "Opponent turn")
@@ -826,6 +933,15 @@ struct SenetBackdropView: View {
                 .blendMode(.multiply)
         }
         .ignoresSafeArea()
+    }
+}
+
+struct SetupBackdropView: View {
+    var body: some View {
+        Image("SetupBackground")
+            .resizable()
+            .scaledToFill()
+            .ignoresSafeArea()
     }
 }
 
