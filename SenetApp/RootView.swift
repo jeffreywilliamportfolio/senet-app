@@ -15,17 +15,33 @@ struct RootView: View {
     }
 
     private func applyOrientation(for stage: GameViewModel.Stage) {
-        let newMask: UIInterfaceOrientationMask
+        let supportedMask: UIInterfaceOrientationMask
+        let requestedMask: UIInterfaceOrientationMask
         switch stage {
         case .game:
-            newMask = .landscape
+            supportedMask = .landscape
+            requestedMask = .landscapeRight
         case .setup, .tutorial, .rules:
-            newMask = .portrait
+            supportedMask = .portrait
+            requestedMask = .portrait
         }
-        OrientationLock.shared.mask = newMask
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let window = windowScene.windows.first,
+        OrientationLock.shared.mask = supportedMask
+
+        let windowScene = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first(where: { $0.activationState == .foregroundActive })
+            ?? UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first
+
+        guard let windowScene else { return }
+
+        if #available(iOS 16.0, *) {
+            let preferences = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: requestedMask)
+            windowScene.requestGeometryUpdate(preferences) { _ in }
+        }
+
+        guard let window = windowScene.windows.first(where: { $0.isKeyWindow }),
               let root = window.rootViewController else { return }
         root.setNeedsUpdateOfSupportedInterfaceOrientations()
+        UIViewController.attemptRotationToDeviceOrientation()
     }
 }

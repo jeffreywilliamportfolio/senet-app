@@ -5,7 +5,7 @@ struct ContentView: View {
     @ObservedObject var viewModel: GameViewModel
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .top) {
             SenetBackdropView()
 
             switch viewModel.stage {
@@ -19,6 +19,7 @@ struct ContentView: View {
                 GameView(viewModel: viewModel)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
@@ -289,119 +290,30 @@ struct SetupView: View {
 
     var body: some View {
         ScrollView(showsIndicators: false) {
-            VStack(spacing: 22) {
-                VStack(spacing: 10) {
-                    Text("Senet")
-                        .font(.system(size: 34, weight: .semibold, design: .serif))
-                        .foregroundColor(SenetTheme.ink)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.8)
+            VStack(spacing: 16) {
+                Color.green
+                    .frame(height: 12)
 
-                    Text("Core mechanics")
-                        .font(.system(size: 13, weight: .medium, design: .serif))
-                        .foregroundColor(SenetTheme.mutedInk)
-                        .textCase(.uppercase)
-                        .tracking(2)
+                Text("SENET TITLE DEBUG")
+                    .font(.system(size: 32, weight: .bold, design: .serif))
+                    .foregroundColor(.red)
+                    .padding(.top, 12)
 
-                    HStack(spacing: 14) {
-                        Image("player-token-a")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 34, height: 34)
-                        Image("player-token-b")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 34, height: 34)
-                    }
-                    .padding(.top, 2)
+                Text("SUBTITLE DEBUG")
+                    .font(.system(size: 16, weight: .semibold, design: .serif))
+                    .foregroundColor(.blue)
+
+                Button("Start Game") {
+                    viewModel.startGame()
                 }
-                .padding(18)
-                .background(
-                    SenetCardBackground(cornerRadius: 22, showsOrnaments: true, shadowRadius: 18, shadowY: 8)
-                )
-
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Player name")
-                        .font(.system(size: 16, weight: .semibold, design: .serif))
-                        .foregroundColor(SenetTheme.ink)
-
-                    TextField("Enter your name", text: $viewModel.playerName)
-                        .padding(12)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                .fill(SenetTheme.cardFill)
-                        )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                .stroke(SenetTheme.cardStroke, lineWidth: 1)
-                        )
-
-                    Text("Piece color")
-                        .font(.system(size: 16, weight: .semibold, design: .serif))
-                        .foregroundColor(SenetTheme.ink)
-
-                    HStack(spacing: 12) {
-                        ForEach(GameViewModel.PlayerColor.allCases) { color in
-                            Button {
-                                viewModel.playerColor = color
-                            } label: {
-                                HStack(spacing: 8) {
-                                    Circle()
-                                        .fill(color == .light ? Color(white: 0.93) : Color(white: 0.15))
-                                        .frame(width: 22, height: 22)
-                                        .overlay(
-                                            Circle()
-                                                .stroke(Color.black.opacity(0.2), lineWidth: 1)
-                                        )
-                                    Text(color.rawValue.capitalized)
-                                        .font(.system(size: 14, weight: .semibold, design: .serif))
-                                        .foregroundColor(SenetTheme.ink)
-                                }
-                                .padding(.horizontal, 14)
-                                .padding(.vertical, 10)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                        .fill(viewModel.playerColor == color ? SenetTheme.accent : SenetTheme.cardFill)
-                                )
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                        .stroke(SenetTheme.cardStroke, lineWidth: 1)
-                                )
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
-                    .frame(maxWidth: .infinity, alignment: .center)
-                }
-                .padding(20)
-                .background(
-                    SenetCardBackground(cornerRadius: 20, showsOrnaments: true, shadowRadius: 20, shadowY: 8)
-                )
-
-                VStack(spacing: 12) {
-                    Button("Start Game") {
-                        viewModel.startGame()
-                    }
-                    .buttonStyle(SenetPrimaryButtonStyle())
-                    .disabled(viewModel.playerName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-
-                    Button("How To Play") {
-                        viewModel.showTutorial()
-                    }
-                    .buttonStyle(SenetSecondaryButtonStyle())
-
-                    Button("Rules") {
-                        viewModel.showRules()
-                    }
-                    .buttonStyle(SenetSecondaryButtonStyle())
-                }
+                .buttonStyle(SenetPrimaryButtonStyle())
             }
-            .frame(maxWidth: .infinity)
-            .padding(.top, 18)
+            .frame(maxWidth: .infinity, alignment: .top)
+            .padding(.top, 24)
             .padding(.horizontal, 24)
             .padding(.bottom, 32)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .background(Color.yellow.opacity(0.2))
     }
 }
 
@@ -411,29 +323,53 @@ struct GameView: View {
     var body: some View {
         GeometryReader { proxy in
             let isLandscape = proxy.size.width > proxy.size.height
-            let boardSize = boardSize(in: proxy.size)
 
             if isLandscape {
-                HStack(spacing: 18) {
-                    BoardView(
-                        state: viewModel.state,
-                        selectedPieceID: viewModel.selectedPieceID,
-                        legalDestinations: viewModel.visibleLegalDestinations,
-                        movablePieceIDs: viewModel.movablePieceIDs,
-                        captureFlashSquare: viewModel.captureFlashSquare,
-                        waterSweepToken: viewModel.waterSweepToken,
-                        isWaterSweepActive: viewModel.isWaterSweepActive,
-                        humanColor: viewModel.humanColor,
-                        computerColor: viewModel.computerColor,
-                        onSquareTap: viewModel.handleTap
-                    )
-                    .frame(width: boardSize.width, height: boardSize.height)
+                let insets = proxy.safeAreaInsets
+                let safeSize = CGSize(
+                    width: proxy.size.width - insets.leading - insets.trailing,
+                    height: proxy.size.height - insets.top - insets.bottom
+                )
+                let boardSize = boardSize(in: safeSize)
 
-                    GameControlsView(viewModel: viewModel)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                ZStack {
+                    VStack(spacing: 16) {
+                        BoardView(
+                            state: viewModel.state,
+                            selectedPieceID: viewModel.selectedPieceID,
+                            legalDestinations: viewModel.visibleLegalDestinations,
+                            movablePieceIDs: viewModel.movablePieceIDs,
+                            captureFlashSquare: viewModel.captureFlashSquare,
+                            waterSweepToken: viewModel.waterSweepToken,
+                            isWaterSweepActive: viewModel.isWaterSweepActive,
+                            humanColor: viewModel.humanColor,
+                            computerColor: viewModel.computerColor,
+                            onSquareTap: viewModel.handleTap
+                        )
+                        .frame(width: boardSize.width, height: boardSize.height)
+
+                        GameControlsInlineView(viewModel: viewModel)
+
+                        if case .won(let winner) = viewModel.state.status {
+                            Text(winner == .human ? "You win." : "Computer wins.")
+                                .font(.system(size: 18, weight: .semibold, design: .serif))
+                                .foregroundColor(SenetTheme.ink)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+
+                    VStack(spacing: 0) {
+                        GameHeaderView(viewModel: viewModel)
+                        Spacer()
+                    }
                 }
-                .padding()
+                .frame(width: safeSize.width, height: safeSize.height)
+                .position(
+                    x: insets.leading + safeSize.width / 2,
+                    y: insets.top + safeSize.height / 2
+                )
             } else {
+                let boardSize = boardSize(in: proxy.size)
                 VStack(spacing: 16) {
                     GameHeaderView(viewModel: viewModel)
 
